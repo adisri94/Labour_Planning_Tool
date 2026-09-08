@@ -1,0 +1,33 @@
+# Feature Set Overview — Decision Brief
+
+One-page summary of all 10 proposed features so you can decide what to approve, defer, or exclude before individual [Feature Documents](features/) go through full review. Each row links to the full document for detail.
+
+Per [CLAUDE.md](../CLAUDE.md) Section 7, no development starts on any item until its full Feature Document, Product Backlog entry, Sprint Backlog entry, and test cases are approved — this brief is only for the initial go/no-go/defer call.
+
+| # | Feature | What it does | Why it matters | Depends on | Notable open question | MoSCoW |
+|---|---------|--------------|-----------------|------------|------------------------|--------|
+| [01](features/01-facility-org-master-data.md) | **Facility & Org Master Data** | CRUD for warehouse, zone, employee, job role, and role certification. | Foundational — nearly every other feature reads this data. Without it nothing else can run. | None | Manual entry vs. HCM (Workday) feed for initial employee load. | **Must** |
+| [02](features/02-shift-compliance-configuration.md) | **Shift & Compliance Configuration** | Defines shift templates and attaches labor regulations to them; computes available working minutes per shift. | Supplies the denominator (`available_shift_minutes`) for the headcount formula, and the legal guardrails for scheduling. | 01 (warehouse) | Where legal sign-off gets recorded. | **Must** |
+| [03](features/03-demand-signal-ingestion.md) | **Demand Signal Ingestion** | Ingests forecasts and confirmed orders/order lines, with freshness/quality checks. | The demand-side data — without it there's nothing to plan labor against. | 01, 02 (zone/warehouse) | Order dedup rule; first WMS/OMS feed format to target. | **Must** |
+| [04](features/04-task-engine.md) | **Task Engine** | Defines task types with standard times; generates atomic `TASK` records from orders/forecasts; governs changes to standard time. | Converts demand volume into labor *minutes* — the direct multiplier in the headcount formula. | 01, 03 | Proposes a new `task_type_change_log` table (ERD v2→v3 bump). Rule for splitting one order line into multiple zone tasks. | **Must** |
+| [05](features/05-labor-requirement-calculation.md) | **Labor Requirement Calculation Engine** | Aggregates task minutes and computes required headcount per zone/role/shift/slot. | This is the core output most people mean by "labor planning" — the headcount number itself. | 02, 04 | How a forecast-driven task gets "replaced" by an actual order without double-counting. | **Must** |
+| [06](features/06-employee-shift-supply-tracking.md) | **Employee Shift & Supply Tracking** | Schedules employees onto shifts; captures actual attendance for variance analysis. | The supply side — without it there's nothing to match requirements against. | 01, 02 | Manual attendance entry vs. badge/clock integration. | **Must** |
+| [07](features/07-labor-plan-matching.md) | **Labor Plan Matching** | Matches requirements to available employee shifts and produces the final staffing plan. | The primary consumer-facing deliverable — what a warehouse manager actually acts on. | 05, 06 | Tie-break rule when multiple qualified employees are available; auto-confirm vs. always manual. | **Must** |
+| [08](features/08-governance-change-management.md) | **Governance & Change Management** | Dual-approval workflow and audit trail for changing `std_time_mins`; enforces the schema-change notice period. | Protects the single most consequential field in the model from unilateral or silent changes. Can be descoped short-term at the cost of weaker controls (manual approval discipline instead of enforced). | 04 | Notification channel for breaking-change notices; shares the ERD bump proposed in 04. | **Should** |
+| [09](features/09-observability-data-health.md) | **Observability & Data Health Monitoring** | Automated health checks (forecast staleness, null headcount, unconfirmed plans, std_time drift, attendance gaps) with alerting. | Makes data product health self-reporting instead of requiring manual investigation. Can be deferred short-term — checks are additive, not blocking, to other features. | 03, 05, 07, 08 | Alert delivery channel (email/Slack/in-app); alert history retention. | **Could** |
+| [10](features/10-data-product-catalog-api-layer.md) | **Data Product Catalog & API Layer** | Consistent API conventions across all features, OpenAPI documentation, and published catalog entries for the four data products. | Architectural backbone — every other feature's API should follow this contract. Best decided *early* even if built incrementally, since retrofitting API conventions later is costly. | None structurally, but ideally decided before 01 is built | API authentication/authorization approach is undecided and blocks a clean start on 01. | **Should** |
+
+## MoSCoW rationale
+
+- **Must have — 01, 02, 03, 04, 05, 06, 07.** These form one unbroken chain: master data → shift/compliance config → demand → tasks → requirement calc → supply → matched plan. Remove any single link and the tool cannot produce its core deliverable (a labor plan). This is the minimum viable product.
+- **Should have — 08 (Governance), 10 (API Layer).** Not required for the calculation chain to function, but both carry real cost if skipped: 08 protects against a single bad edit silently distorting headcount facility-wide; 10 is cheapest to decide *before* the Must-have features are built (retrofitting API/auth conventions later is expensive), even if its full implementation trails behind. Recommend deciding 10's conventions alongside 01, and building 08 once 04/05 are stable.
+- **Could have — 09 (Observability).** Valuable and low-risk to defer: it's purely additive alerting on top of a working system, and every check it implements assumes 03/05/07/08 already exist to monitor.
+- **Won't have (this horizon) — none proposed.** No feature in the current set was scoped as explicitly excluded; if you choose to Exclude any row via the Decision options below, it moves here and gets reflected in [PRODUCT_OVERVIEW.md](PRODUCT_OVERVIEW.md)'s "out of scope" list.
+
+## Suggested sequencing if all are approved
+
+01 → 02 → 03 → 04 → 05 → 06 → 07, with **10**'s API conventions decided alongside 01 (not necessarily fully built, but agreed), and **08**/**09** layered in once the core chain (01–07) is working — they harden governance and observability around a system that already functions.
+
+## Decision options per feature
+
+For each feature, you can mark: **Approve** (move to Sprint Backlog once fully detailed) / **Defer** (keep in backlog, not this horizon) / **Exclude** (drop from scope — will be reflected in Product Overview's "out of scope" list).

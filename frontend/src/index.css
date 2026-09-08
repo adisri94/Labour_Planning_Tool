@@ -1,0 +1,69 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: #f7f7f9;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+header .subtitle {
+  color: #666;
+  margin-top: -0.5rem;
+}
+
+nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+nav button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+nav button.active {
+  background: #1a1a1a;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.error {
+  color: #b00020;
+}
+
+.status-active {
+  color: #1a7f37;
+}
+
+.status-terminated {
+  color: #b00020;
+}
+
+.status-on_leave {
+  color: #9a6700;
+}
+
+button {
+  font-family: inherit;
+}

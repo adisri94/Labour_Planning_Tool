@@ -37,6 +37,7 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 - **Data model impact**: ERD reference bumped **v2 → v3**: added `is_active`, `activated_by`, `activated_at` to `SHIFT_TEMPLATE` and `LABOR_REGULATION` (Sections 2.6–2.7), implementing the "Legal sign-off before activation" contract (Section 5.2) as an enforced gate. Also retroactively filled in the previously-blank v2.0 changelog entry. See [labor-planning-erd-reference-v2.md](reference/labor-planning-erd-reference-v2.md) §9.
 - **Deferred / carried over**: None for BL-2 itself. Flagged for Feature 04 (Sprint 4): its previously-proposed ERD bump is now v3→v4, not v2→v3, since this sprint took v3.
 - **Related decisions**: [Sprint 2 approved into Sprint Backlog](DECISION_LOG.md) (2026-09-09).
+- **Commit**: `7005cce` on branch `master`, 2026-09-09 — pushed to `https://github.com/adisri94/Labour_Planning_Tool.git` per [CLAUDE.md](../CLAUDE.md) §8.
 - **Owner**: Aditya Srivastava
 
 ### Sprint 1 (backfill) — 2026-09-09

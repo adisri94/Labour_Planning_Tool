@@ -25,6 +25,15 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### [2026-09-10] Three-shift pattern (Morning/Evening/Night) folded into seed_data.sql
+
+- **Status**: Decided
+- **Context**: User previously added an Evening Shift (14:00–22:00) and shortened Morning Shift's end time (15:00→14:00) via a direct DB Browser edit to the local, gitignored `db/labor_planning.db`, to verify the change flowed through the API/frontend. User then asked to make this the default seed data, not just a local one-off.
+- **Options considered**: N/A — direct instruction to fold the manually-verified change into the checked-in seed script.
+- **Decision**: Updated `db/seed_data.sql`: Morning Shift end time → 14:00; added Evening Shift (14:00–22:00, `shift_type = 'afternoon'`); Night Shift unchanged; FLSA regulation now attached to all three shifts via `REGULATION_SHIFT` (3 links, up from 2). Updated the two seed-dependent assertions in `backend/tests/test_shift_compliance.py` (shift/link counts 2→3; Morning Shift end time and new Evening Shift's timing) and the Feature 02 doc's seed-data description.
+- **Consequences**: All three shifts are now 8 hours gross (480 min); with the 60-minute FLSA break, `available_shift_minutes = 420` for each — this no longer matches the ERD reference §4 worked example (540 gross → 480 available, from a 9-hour shift). This is an accepted, explicitly documented deviation reflecting a more realistic 3-shift-per-day operating pattern, not an error to reconcile. All 36 automated tests pass with the updated assertions.
+- **Owner**: Aditya Srivastava
+
 ### [2026-09-10] Demo seed data re-localized from India to the US
 
 - **Status**: Decided

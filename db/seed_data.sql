@@ -49,17 +49,24 @@ INSERT INTO employee_role (employee_id, job_role_id, certified_date, is_primary)
 
 -- Sprint 2 (BL-2): pre-activated so Sprint 3+ demos aren't blocked by the
 -- legal sign-off gate (see docs/features/02-shift-compliance-configuration.md).
+-- Three-shift pattern (Morning/Evening/Night) folded in from a manual
+-- DB Browser edit -- see docs/DECISION_LOG.md, 2026-09-10.
 INSERT INTO shift_template (id, warehouse_id, name, start_time, end_time, shift_type, days_of_week, is_active, activated_by, activated_at) VALUES
-    ('shift-morning', 'wh-001', 'Morning Shift', '06:00', '15:00', 'day',   62, 1, 'Labor Planning PM', '2026-09-09T09:00:00'),
-    ('shift-night',   'wh-001', 'Night Shift',   '22:00', '06:00', 'night', 62, 1, 'Labor Planning PM', '2026-09-09T09:00:00');
+    ('shift-morning', 'wh-001', 'Morning Shift', '06:00', '14:00', 'day',      62, 1, 'Labor Planning PM', '2026-09-09T09:00:00'),
+    ('shift-evening', 'wh-001', 'Evening Shift', '14:00', '22:00', 'afternoon', 62, 1, 'Labor Planning PM', '2026-09-10T09:00:00'),
+    ('shift-night',   'wh-001', 'Night Shift',   '22:00', '06:00', 'night',    62, 1, 'Labor Planning PM', '2026-09-09T09:00:00');
 
--- break_interval_mins kept at 60 to preserve the 540-60=480 ERD worked
--- example (docs/reference/labor-planning-erd-reference-v2.md §4); FLSA's
--- own overtime threshold is 40 hrs/week (8 hrs/day used here as the
+-- break_interval_mins kept at 60 (mandatory meal break); each shift is now
+-- 8 hours gross (480 min), so available_shift_minutes = 420 for all three
+-- -- this no longer matches the ERD reference §4 worked example's 540/480
+-- figures (that example used a 9-hour shift), which is an accepted,
+-- documented deviation now that the demo uses a real 3-shift 8hr pattern.
+-- FLSA's own overtime threshold is 40 hrs/week (8 hrs/day used here as the
 -- per-shift cap), and 1.5x is the actual FLSA overtime multiplier.
 INSERT INTO labor_regulation (id, name, max_hours_per_day, max_hours_per_week, break_interval_mins, overtime_multiplier, region, is_active, activated_by, activated_at) VALUES
     ('reg-flsa', 'Fair Labor Standards Act (FLSA)', 8, 40, 60, 1.5, 'USA', 1, 'Legal & Compliance', '2026-09-09T09:00:00');
 
 INSERT INTO regulation_shift (regulation_id, shift_template_id) VALUES
     ('reg-flsa', 'shift-morning'),
+    ('reg-flsa', 'shift-evening'),
     ('reg-flsa', 'shift-night');

@@ -231,7 +231,7 @@ def test_tc17_seed_data_bootstraps_active_shift_config(tmp_path):
     conn = sqlite3.connect(db_dir / "labor_planning.db")
     try:
         shift_rows = conn.execute("SELECT is_active FROM shift_template").fetchall()
-        assert len(shift_rows) == 2
+        assert len(shift_rows) == 3
         assert all(row[0] == 1 for row in shift_rows)
 
         reg_rows = conn.execute("SELECT is_active FROM labor_regulation").fetchall()
@@ -239,7 +239,7 @@ def test_tc17_seed_data_bootstraps_active_shift_config(tmp_path):
         assert reg_rows[0][0] == 1
 
         link_count = conn.execute("SELECT COUNT(*) FROM regulation_shift").fetchone()[0]
-        assert link_count == 2
+        assert link_count == 3
     finally:
         conn.close()
 
@@ -260,11 +260,20 @@ def test_tc18_seeded_morning_shift_available_minutes(tmp_path):
             "SELECT start_time, end_time FROM shift_template WHERE id = 'shift-morning'"
         ).fetchone()
         assert start == "06:00"
-        assert end == "15:00"
+        assert end == "14:00"
+
+        evening_start, evening_end = conn.execute(
+            "SELECT start_time, end_time FROM shift_template WHERE id = 'shift-evening'"
+        ).fetchone()
+        assert evening_start == "14:00"
+        assert evening_end == "22:00"
+
         break_mins = conn.execute(
             "SELECT break_interval_mins FROM labor_regulation WHERE id = 'reg-flsa'"
         ).fetchone()[0]
         assert break_mins == 60
-        # 540 gross - 60 break = 480, matching the ERD worked example.
+        # 480 gross - 60 break = 420 for each of the three 8-hour shifts
+        # (Morning/Evening/Night) -- see db/seed_data.sql for why this no
+        # longer matches the ERD reference's 540/480 worked example.
     finally:
         conn.close()

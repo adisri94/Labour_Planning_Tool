@@ -16,7 +16,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    # Regex (not a fixed list) so the local dev frontend can run on whichever
+    # port Vite ends up bound to (e.g. if 5173 is already taken).
+    allow_origin_regex=r"http://localhost:\d+",
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -38,7 +38,7 @@ def test_tc2_list_zones_for_warehouse_with_none(client, warehouse):
 
 
 def test_tc3_zone_isolation_across_warehouses(client, warehouse):
-    client.post("/warehouses", json={"id": "wh-002", "name": "Delhi FC-1", "timezone": "Asia/Kolkata"})
+    client.post("/warehouses", json={"id": "wh-002", "name": "Denver FC-1", "timezone": "America/Denver"})
     client.post(
         f"/warehouses/{warehouse['id']}/zones",
         json={"id": "zone-001", "name": "Pick Zone A", "zone_type": "picking", "capacity": 15},

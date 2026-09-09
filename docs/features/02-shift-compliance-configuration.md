@@ -127,7 +127,7 @@ CREATE INDEX IF NOT EXISTS idx_shift_template_warehouse ON shift_template(wareho
 
 ### 4.4 Seed data (`db/seed_data.sql` — this feature's additions)
 
-For warehouse `wh-001`: two shift templates ("Morning Shift" 06:00–15:00, "Night Shift" 22:00–06:00 next day — to exercise the midnight-wrap case), both `is_active = true` (pre-activated in seed data so Sprint 3+ demos aren't blocked); one `LABOR_REGULATION` ("Factories Act 1948"-style, `max_hours_per_day=9`, `max_hours_per_week=48`, `break_interval_mins=60`), also seeded `is_active = true`, attached to both shift templates via `REGULATION_SHIFT`.
+For warehouse `wh-001`: two shift templates ("Morning Shift" 06:00–15:00, "Night Shift" 22:00–06:00 next day — to exercise the midnight-wrap case), both `is_active = true` (pre-activated in seed data so Sprint 3+ demos aren't blocked); one `LABOR_REGULATION` (US Fair Labor Standards Act, `max_hours_per_day=8`, `max_hours_per_week=40`, `break_interval_mins=60`, `region="USA"` — updated from the original India-based example per [DECISION_LOG.md](../DECISION_LOG.md) 2026-09-10; `break_interval_mins` deliberately kept at 60 to preserve the ERD §4 worked example's 480-minute result), also seeded `is_active = true`, attached to both shift templates via `REGULATION_SHIFT`.
 
 ## 5. API / Interface Design
 

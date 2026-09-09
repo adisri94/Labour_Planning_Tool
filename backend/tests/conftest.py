@@ -43,9 +43,9 @@ def client():
 def warehouse(client):
     payload = {
         "id": "wh-001",
-        "name": "Mumbai FC-1",
-        "location": "Mumbai, India",
-        "timezone": "Asia/Kolkata",
+        "name": "Chicago FC-1",
+        "location": "Chicago, IL, USA",
+        "timezone": "America/Chicago",
     }
     res = client.post("/warehouses", json=payload)
     assert res.status_code == 201

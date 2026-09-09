@@ -1,9 +1,10 @@
 -- Warehouse Labor Planning Tool -- Demo seed data (Sprint 1 / BL-1)
 -- Sized to support the ERD reference §4 worked example once later sprints land:
 -- Pick Zone A + Unit Pick task type + 480-min shift -> 1 required picker.
+-- Localized to a US warehouse/workforce (see docs/DECISION_LOG.md, 2026-09-10).
 
 INSERT INTO warehouse (id, name, location, timezone) VALUES
-    ('wh-001', 'Mumbai FC-1', 'Mumbai, India', 'Asia/Kolkata');
+    ('wh-001', 'Chicago FC-1', 'Chicago, IL, USA', 'America/Chicago');
 
 INSERT INTO zone (id, warehouse_id, name, zone_type, capacity) VALUES
     ('zone-001', 'wh-001', 'Pick Zone A', 'picking', 15),
@@ -12,24 +13,24 @@ INSERT INTO zone (id, warehouse_id, name, zone_type, capacity) VALUES
     ('zone-004', 'wh-001', 'Outbound Shipping', 'shipping', 8);
 
 INSERT INTO job_role (id, name, skill_level, labor_rate) VALUES
-    ('role-picker', 'Picker', 'entry', 180.0),
-    ('role-packer', 'Packer', 'entry', 180.0),
-    ('role-forklift', 'Forklift Operator', 'intermediate', 240.0),
-    ('role-receiver', 'Receiver', 'entry', 175.0);
+    ('role-picker', 'Picker', 'entry', 19.50),
+    ('role-packer', 'Packer', 'entry', 19.00),
+    ('role-forklift', 'Forklift Operator', 'intermediate', 24.00),
+    ('role-receiver', 'Receiver', 'entry', 18.50);
 
 INSERT INTO employee (id, warehouse_id, name, employee_type, employment_status, hire_date) VALUES
-    ('emp-001', 'wh-001', 'Aditi Rao',      'full_time', 'active',     '2024-01-15'),
-    ('emp-002', 'wh-001', 'Rohan Mehta',    'full_time', 'active',     '2024-02-01'),
-    ('emp-003', 'wh-001', 'Priya Nair',     'full_time', 'active',     '2024-03-10'),
-    ('emp-004', 'wh-001', 'Vikram Singh',   'part_time', 'active',     '2024-04-05'),
-    ('emp-005', 'wh-001', 'Sneha Kulkarni', 'full_time', 'active',     '2024-05-20'),
-    ('emp-006', 'wh-001', 'Arjun Desai',    'full_time', 'active',     '2024-06-11'),
-    ('emp-007', 'wh-001', 'Kavya Iyer',     'temporary', 'active',     '2024-07-01'),
-    ('emp-008', 'wh-001', 'Manish Gupta',   'full_time', 'on_leave',   '2023-11-19'),
-    ('emp-009', 'wh-001', 'Divya Shah',     'full_time', 'active',     '2024-08-14'),
-    ('emp-010', 'wh-001', 'Karan Malhotra', 'full_time', 'terminated', '2023-05-02'),
-    ('emp-011', 'wh-001', 'Neha Joshi',     'part_time', 'active',     '2024-09-09'),
-    ('emp-012', 'wh-001', 'Suresh Pillai',  'full_time', 'active',     '2024-01-29');
+    ('emp-001', 'wh-001', 'Emily Carter',    'full_time', 'active',     '2024-01-15'),
+    ('emp-002', 'wh-001', 'Michael Johnson', 'full_time', 'active',     '2024-02-01'),
+    ('emp-003', 'wh-001', 'Sarah Williams',  'full_time', 'active',     '2024-03-10'),
+    ('emp-004', 'wh-001', 'David Brown',     'part_time', 'active',     '2024-04-05'),
+    ('emp-005', 'wh-001', 'Jessica Davis',   'full_time', 'active',     '2024-05-20'),
+    ('emp-006', 'wh-001', 'James Miller',    'full_time', 'active',     '2024-06-11'),
+    ('emp-007', 'wh-001', 'Ashley Wilson',   'temporary', 'active',     '2024-07-01'),
+    ('emp-008', 'wh-001', 'Christopher Lee', 'full_time', 'on_leave',   '2023-11-19'),
+    ('emp-009', 'wh-001', 'Amanda Martinez', 'full_time', 'active',     '2024-08-14'),
+    ('emp-010', 'wh-001', 'Daniel Anderson', 'full_time', 'terminated', '2023-05-02'),
+    ('emp-011', 'wh-001', 'Olivia Taylor',   'part_time', 'active',     '2024-09-09'),
+    ('emp-012', 'wh-001', 'Matthew Thomas',  'full_time', 'active',     '2024-01-29');
 
 INSERT INTO employee_role (employee_id, job_role_id, certified_date, is_primary) VALUES
     ('emp-001', 'role-picker',   '2024-01-20', 1),
@@ -52,9 +53,13 @@ INSERT INTO shift_template (id, warehouse_id, name, start_time, end_time, shift_
     ('shift-morning', 'wh-001', 'Morning Shift', '06:00', '15:00', 'day',   62, 1, 'Labor Planning PM', '2026-09-09T09:00:00'),
     ('shift-night',   'wh-001', 'Night Shift',   '22:00', '06:00', 'night', 62, 1, 'Labor Planning PM', '2026-09-09T09:00:00');
 
+-- break_interval_mins kept at 60 to preserve the 540-60=480 ERD worked
+-- example (docs/reference/labor-planning-erd-reference-v2.md §4); FLSA's
+-- own overtime threshold is 40 hrs/week (8 hrs/day used here as the
+-- per-shift cap), and 1.5x is the actual FLSA overtime multiplier.
 INSERT INTO labor_regulation (id, name, max_hours_per_day, max_hours_per_week, break_interval_mins, overtime_multiplier, region, is_active, activated_by, activated_at) VALUES
-    ('reg-factories-act', 'Factories Act 1948', 9, 48, 60, 1.5, 'India', 1, 'Legal & Compliance', '2026-09-09T09:00:00');
+    ('reg-flsa', 'Fair Labor Standards Act (FLSA)', 8, 40, 60, 1.5, 'USA', 1, 'Legal & Compliance', '2026-09-09T09:00:00');
 
 INSERT INTO regulation_shift (regulation_id, shift_template_id) VALUES
-    ('reg-factories-act', 'shift-morning'),
-    ('reg-factories-act', 'shift-night');
+    ('reg-flsa', 'shift-morning'),
+    ('reg-flsa', 'shift-night');

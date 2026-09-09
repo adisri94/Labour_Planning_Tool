@@ -262,7 +262,7 @@ def test_tc18_seeded_morning_shift_available_minutes(tmp_path):
         assert start == "06:00"
         assert end == "15:00"
         break_mins = conn.execute(
-            "SELECT break_interval_mins FROM labor_regulation WHERE id = 'reg-factories-act'"
+            "SELECT break_interval_mins FROM labor_regulation WHERE id = 'reg-flsa'"
         ).fetchone()[0]
         assert break_mins == 60
         # 540 gross - 60 break = 480, matching the ERD worked example.

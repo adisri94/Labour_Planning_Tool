@@ -124,7 +124,7 @@ Constraints match the ERD reference exactly (`labor_rate > 0`, enumerated status
 
 ### 4.2 Seed data (`db/seed_data.sql` — this feature's portion)
 
-One warehouse ("Mumbai FC-1"), 3–4 zones (Picking, Packing, Receiving, Shipping), 3–4 job roles (Picker, Packer, Forklift Operator, Receiver), and ~10–15 employees with role certifications — enough to make Feature 05's worked example (ERD reference §4) demonstrable once later sprints land.
+One warehouse ("Chicago FC-1", US-based per [DECISION_LOG.md](../DECISION_LOG.md) 2026-09-10), 3–4 zones (Picking, Packing, Receiving, Shipping), 3–4 job roles (Picker, Packer, Forklift Operator, Receiver) with USD hourly `labor_rate` values, and ~10–15 employees with role certifications — enough to make Feature 05's worked example (ERD reference §4) demonstrable once later sprints land.
 
 ## 5. API / Interface Design
 

@@ -25,6 +25,15 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### [2026-09-10] Demo seed data re-localized from India to the US
+
+- **Status**: Decided
+- **Context**: The demo warehouse, workforce, and labor regulation were originally seeded with India-specific context (Mumbai FC-1, Asia/Kolkata timezone, Indian employee names, and the Indian Factories Act 1948 as the seeded `LABOR_REGULATION`). User asked to re-localize the demo to be relevant for US-based clients instead.
+- **Options considered**: N/A — direct instruction to change locale; only judgment calls were on specific values (see Consequences).
+- **Decision**: Updated `db/seed_data.sql` (Sprint 1 and Sprint 2 sections): warehouse → "Chicago FC-1", "Chicago, IL, USA", `America/Chicago`; 12 employee names → US-typical names (IDs, hire dates, statuses, and role assignments left unchanged); `JOB_ROLE.labor_rate` → plausible USD hourly wages ($18.50–$24.00, previously values that read as INR); `LABOR_REGULATION` → renamed `reg-factories-act`/"Factories Act 1948" to `reg-flsa`/"Fair Labor Standards Act (FLSA)", `region` → "USA", `max_hours_per_day` 9→8 and `max_hours_per_week` 48→40 (FLSA's actual overtime threshold). `break_interval_mins` and `overtime_multiplier` (1.5x) left unchanged — 60-minute break preserves the ERD reference §4 worked example's 540→480 minute result, and 1.5x happens to also be the real FLSA overtime multiplier. Updated the two dependent test files (`backend/tests/conftest.py`, `test_master_data.py`, `test_shift_compliance.py`) and the seed-data descriptions in Feature Documents 01 and 02 to match. The authoritative [ERD reference](../reference/labor-planning-erd-reference-v2.md)'s illustrative examples (e.g., "Mumbai FC-1" in the WAREHOUSE attribute description) were deliberately left untouched — those are generic placeholder examples in the schema documentation, not the actual seed data, and changing them isn't necessary for this request.
+- **Consequences**: All 36 automated tests still pass unchanged (no test asserted the old India-specific literal values except the regulation id/location fields, which were updated). Anyone running `python db/init_db.py --reset` now gets a US-localized demo. No schema/entity change — no ERD version bump required.
+- **Owner**: Aditya Srivastava
+
 ### [2026-09-09] ERD reference bumped to v3; Sprint 2 development completed
 
 - **Status**: Decided

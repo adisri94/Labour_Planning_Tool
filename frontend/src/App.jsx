@@ -1,11 +1,13 @@
 import { useState } from "react";
 import WarehousePage from "./pages/WarehousePage.jsx";
 import EmployeesPage from "./pages/EmployeesPage.jsx";
+import ShiftCompliancePage from "./pages/ShiftCompliancePage.jsx";
 import "./index.css";
 
 const TABS = {
   warehouse: { label: "Warehouse & Zones", component: WarehousePage },
   employees: { label: "Employees", component: EmployeesPage },
+  shifts: { label: "Shifts & Compliance", component: ShiftCompliancePage },
 };
 
 export default function App() {
@@ -16,7 +18,7 @@ export default function App() {
     <div className="app">
       <header>
         <h1>Warehouse Labor Planning Tool</h1>
-        <p className="subtitle">Sprint 1 demo — Facility &amp; Org Master Data</p>
+        <p className="subtitle">Sprint 1–2 demo — Facility &amp; Org Master Data, Shift &amp; Compliance</p>
       </header>
       <nav>
         {Object.entries(TABS).map(([key, { label }]) => (

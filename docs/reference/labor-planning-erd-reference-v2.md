@@ -1,7 +1,7 @@
 # Warehouse Labor Planning Tool | ERD Reference
 
 **Entity Relationship Diagram — Data Model Reference Document**
-**Version 2**
+**Version 3**
 
 ---
 
@@ -112,6 +112,9 @@ Defines a reusable shift schedule pattern for a warehouse. Templates capture the
 | `end_time` | Time | | Scheduled shift end time. |
 | `shift_type` | String | | Classification: `day`, `afternoon`, or `night`. |
 | `days_of_week` | Integer | | Bitmask representing active days (e.g., 62 = Mon–Fri). |
+| `is_active` | Boolean | | *(Added v3)* Whether this template has passed the Shift & Compliance activation gate (Section 5.2) and may be attached to/used by other features. Defaults to `false` on creation. |
+| `activated_by` | String | | *(Added v3)* Who activated this record in-app. Expected to correspond to a real legal sign-off recorded by process convention (not automated) in the project's Decision Log. |
+| `activated_at` | Timestamp | | *(Added v3)* When this record was activated. |
 
 ---
 
@@ -128,6 +131,9 @@ Captures the legal and contractual constraints that govern how employees can be 
 | `break_interval_mins` | Integer | | Mandatory break after this many continuous working minutes. |
 | `overtime_multiplier` | Float | | Pay multiplier for hours beyond the standard threshold (e.g., 1.5 for time-and-a-half). |
 | `region` | String | | Jurisdiction or region where this regulation applies. |
+| `is_active` | Boolean | | *(Added v3)* Whether this regulation has passed the activation gate and may be attached to a shift template. Defaults to `false` on creation. |
+| `activated_by` | String | | *(Added v3)* Who activated this record in-app. |
+| `activated_at` | Timestamp | | *(Added v3)* When this record was activated. |
 
 ---
 
@@ -406,7 +412,7 @@ Manages all configuration and regulatory constraints that govern how employees c
 |----------|--------|
 | **Entities** | SHIFT_TEMPLATE, LABOR_REGULATION, REGULATION_SHIFT |
 | **Owner** | Operations / Legal and Compliance team |
-| **Quality Contracts** | `SHIFT_TEMPLATE.start_time` and `end_time` must not be null. `LABOR_REGULATION.max_hours_per_day` and `max_hours_per_week` must be > 0. Changes require Legal sign-off before activation. |
+| **Quality Contracts** | `SHIFT_TEMPLATE.start_time` and `end_time` must not be null. `LABOR_REGULATION.max_hours_per_day` and `max_hours_per_week` must be > 0. Changes require Legal sign-off before activation, enforced in-app *(added v3)* via the `is_active`/`activated_by`/`activated_at` gate on both entities: a `SHIFT_TEMPLATE` or `LABOR_REGULATION` is created `is_active = false` and cannot be attached to/used by other features (e.g., `REGULATION_SHIFT`) until explicitly activated. The gate enforces that activation happened; the actual legal sign-off evidence is a process convention recorded in the project's Decision Log, not something this schema automates. |
 
 ### 5.3 Demand Signals Data Product
 
@@ -504,4 +510,5 @@ Every schema change, governance decision, or SLA update must be recorded here. T
 | Version | Date | Author | Change Description |
 |---------|------|--------|-------------------|
 | 1.0 | 2025-06-19 | Aditya Srivastava | Initial release of ERD reference document. Entity model, relationship catalogue, and calculation walkthrough. |
-| 2.0 | [To be filled] | [To be filled] | [Next change description] |
+| 2.0 | 2025-06-19 | Aditya Srivastava | Added Data Product Definitions (Section 5), Governance and Change Management (Section 6), Observability (Section 7), and Data Catalog Entry Template (Section 8) to the initial entity model. This version was the document's baseline prior to formal changelog discipline being applied retroactively on 2026-09-09. |
+| 3.0 | 2026-09-09 | Aditya Srivastava | Sprint 2 (BL-2, Shift & Compliance Configuration): added `is_active`, `activated_by`, `activated_at` to SHIFT_TEMPLATE (Section 2.6) and LABOR_REGULATION (Section 2.7), implementing the "Legal sign-off before activation" contract (Section 5.2) as an enforced in-app gate rather than an unenforced statement. Non-breaking additive columns (nullable/defaulted); no existing consumers of this local-demo schema, so the standard 5-business-day breaking-change notice did not apply. See [docs/features/02-shift-compliance-configuration.md](../features/02-shift-compliance-configuration.md) Section 4.1 and [docs/DECISION_LOG.md](../DECISION_LOG.md) (2026-09-09). |

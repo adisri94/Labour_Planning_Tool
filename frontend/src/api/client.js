@@ -32,4 +32,23 @@ export const api = {
       method: "PUT",
       body: JSON.stringify(payload),
     }),
+  listShiftTemplates: (warehouseId) => request(`/warehouses/${warehouseId}/shift-templates`),
+  listShiftRegulations: (shiftId) => request(`/shift-templates/${shiftId}/regulations`),
+  getAvailableMinutes: (shiftId) => request(`/shift-templates/${shiftId}/available-minutes`),
+  activateShiftTemplate: (shiftId, activatedBy) =>
+    request(`/shift-templates/${shiftId}/activate`, {
+      method: "POST",
+      body: JSON.stringify({ activated_by: activatedBy }),
+    }),
+  listLaborRegulations: () => request("/labor-regulations"),
+  activateLaborRegulation: (regulationId, activatedBy) =>
+    request(`/labor-regulations/${regulationId}/activate`, {
+      method: "POST",
+      body: JSON.stringify({ activated_by: activatedBy }),
+    }),
+  attachRegulation: (shiftId, regulationId) =>
+    request(`/shift-templates/${shiftId}/regulations`, {
+      method: "POST",
+      body: JSON.stringify({ regulation_id: regulationId }),
+    }),
 };

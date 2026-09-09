@@ -25,6 +25,20 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### Sprint 2 — 2026-09-09 to 2026-09-09
+
+- **Goal**: Add shift templates and labor regulations, with an activation gate standing in for legal sign-off, plus the available-shift-minutes calculation Feature 05 will consume.
+- **Shipped**:
+  - `db/schema.sql` + `db/seed_data.sql` extended: `shift_template`, `labor_regulation`, `regulation_shift` tables; seed data pre-activated (2 shift templates, 1 regulation, both linked) so Sprint 3+ demos aren't blocked by the gate.
+  - Backend (`/backend`): `ShiftTemplate`/`LaborRegulation`/`RegulationShift` models, schemas, services (`compute_available_minutes` handling multi-regulation most-restrictive-break and overnight/midnight-wrapping shifts), and REST endpoints — create/list/update shift templates, create/list regulations, activate either, attach regulations to shifts, and `GET .../available-minutes`.
+  - Activation gate enforced at the point of attachment: an `is_active = false` shift template or regulation cannot be linked via `REGULATION_SHIFT` until explicitly activated.
+  - Minimal frontend (`/frontend`): Shifts & Compliance view — shift/regulation tables, attach-regulation and activate actions, live available-minutes display. Manually verified end-to-end in-browser (480 min for the seeded Morning Shift, matching the ERD worked example; 420 min for the overnight Night Shift).
+  - 18 automated `pytest` tests in `backend/tests/test_shift_compliance.py`, backfilling the full test case doc as part of this sprint (per the updated CLAUDE.md §6 practice) rather than after the fact.
+- **Data model impact**: ERD reference bumped **v2 → v3**: added `is_active`, `activated_by`, `activated_at` to `SHIFT_TEMPLATE` and `LABOR_REGULATION` (Sections 2.6–2.7), implementing the "Legal sign-off before activation" contract (Section 5.2) as an enforced gate. Also retroactively filled in the previously-blank v2.0 changelog entry. See [labor-planning-erd-reference-v2.md](reference/labor-planning-erd-reference-v2.md) §9.
+- **Deferred / carried over**: None for BL-2 itself. Flagged for Feature 04 (Sprint 4): its previously-proposed ERD bump is now v3→v4, not v2→v3, since this sprint took v3.
+- **Related decisions**: [Sprint 2 approved into Sprint Backlog](DECISION_LOG.md) (2026-09-09).
+- **Owner**: Aditya Srivastava
+
 ### Sprint 1 (backfill) — 2026-09-09
 
 - **Goal**: Close the automated-testing gap identified after Sprint 1 shipped with only manual verification; make automated testing standard practice for all future sprints.
@@ -35,6 +49,7 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 - **Data model impact**: None.
 - **Deferred / carried over**: None — all backend-testable Sprint 1 scenarios are now automated.
 - **Related decisions**: [Automated testing backfilled for Sprint 1; made standing practice going forward](DECISION_LOG.md) (2026-09-09) — includes the TC-6 ambiguity found and resolved while writing the tests.
+- **Commit**: `942a277` on branch `master`, 2026-09-09 — pushed to `https://github.com/adisri94/Labour_Planning_Tool.git` per [CLAUDE.md](../CLAUDE.md) §8. Also includes the detailed Sprint 2 (BL-2) Feature Document and Test Cases drafted the same session (not yet approved for development).
 - **Owner**: Aditya Srivastava
 
 ### Sprint 1 — 2026-09-08 to 2026-09-08

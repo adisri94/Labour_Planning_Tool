@@ -25,6 +25,24 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### [2026-09-09] ERD reference bumped to v3; Sprint 2 development completed
+
+- **Status**: Decided
+- **Context**: Sprint 2 (BL-2) development completed: `db/schema.sql`/`seed_data.sql` extended, FastAPI backend and minimal frontend built, and 18 automated `pytest` tests written and passing, backfilling the full test case doc as part of the sprint itself (per the CLAUDE.md §6 practice established 2026-09-09).
+- **Options considered**: N/A — applying the previously-approved ERD v3 bump independently of Feature 04's proposed change, as flagged when Sprint 2 was approved into the backlog.
+- **Decision**: Applied ERD v3: added `is_active`/`activated_by`/`activated_at` to `SHIFT_TEMPLATE` and `LABOR_REGULATION` in [labor-planning-erd-reference-v2.md](../reference/labor-planning-erd-reference-v2.md) §2.6–2.7, updated the §5.2 quality contract description, and filled in the previously-blank v2.0 changelog entry retroactively (§9) alongside the new v3.0 entry. Feature 04's Feature Document updated to note its own proposed bump is now v3→v4, not v2→v3.
+- **Consequences**: All backend acceptance criteria verified via curl and the automated test suite (36/36 passing repo-wide); the frontend's Shifts & Compliance view verified live in-browser, matching the ERD's worked example (480 available minutes for the Morning Shift) and correctly handling the overnight Night Shift's midnight wrap (420 minutes). Not yet committed/pushed — pending separate explicit confirmation per [CLAUDE.md](../CLAUDE.md) §8.
+- **Owner**: Aditya Srivastava
+
+### [2026-09-09] Sprint 2 (BL-2, Shift & Compliance Configuration) approved into Sprint Backlog
+
+- **Status**: Decided
+- **Context**: [Feature Document](../docs/features/02-shift-compliance-configuration.md) (4 user stories, per-story acceptance criteria, DDL sketch, available-minutes calculation rule) and [Test Cases](../docs/testcases/02-shift-compliance-configuration.md) (18 test cases, TC-1–TC-18) were drafted for BL-2 per the [Release Plan](RELEASE_PLAN.md)'s Sprint 2 slot, including a resolution of the Sprint-1-era open question on how legal sign-off is recorded (an `is_active`/`activated_by`/`activated_at` gate on `SHIFT_TEMPLATE` and `LABOR_REGULATION`).
+- **Options considered**: N/A — direct review and approval of the completed document set.
+- **Decision**: Approved as-is, including the proposed ERD v3 bump for the new gate fields. Sprint 1 moved to "Past Sprints" (Done) and Sprint 2 moved into "Current Sprint" in [SPRINT_BACKLOG.md](SPRINT_BACKLOG.md); Feature Document and Test Cases status flipped to `Approved`; [PRODUCT_BACKLOG.md](PRODUCT_BACKLOG.md) BL-2 status flipped to `In Sprint`.
+- **Consequences**: Development on BL-2 may now begin per the Development Gate (CLAUDE.md §7), including extending `db/schema.sql`/`seed_data.sql`, the FastAPI backend, and the minimal frontend for shift templates and regulations. Per [CLAUDE.md](../CLAUDE.md) §6 (updated 2026-09-09), automated `pytest` tests backfilling the test case doc are required as part of this sprint's definition of done, not a follow-up. The [ERD reference](../reference/labor-planning-erd-reference-v2.md) itself still needs its changelog (§9) updated with the v3 entry once the schema change is implemented — tracked as a to-do for this sprint's work, not deferred.
+- **Owner**: Aditya Srivastava
+
 ### [2026-09-09] Automated testing backfilled for Sprint 1; made standing practice going forward
 
 - **Status**: Decided

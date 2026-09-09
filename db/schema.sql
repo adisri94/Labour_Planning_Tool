@@ -47,3 +47,43 @@ CREATE TABLE IF NOT EXISTS employee_role (
 CREATE INDEX IF NOT EXISTS idx_zone_warehouse ON zone(warehouse_id);
 CREATE INDEX IF NOT EXISTS idx_employee_warehouse ON employee(warehouse_id);
 CREATE INDEX IF NOT EXISTS idx_employee_role_employee ON employee_role(employee_id);
+
+-- Sprint 2 (BL-2): Shift & Compliance Configuration
+-- Mirrors docs/reference/labor-planning-erd-reference-v2.md sections 2.6-2.8, PLUS
+-- is_active/activated_by/activated_at -- proposed additions (ERD v3, see
+-- docs/features/02-shift-compliance-configuration.md Section 4.1) standing in for
+-- the "legal sign-off" gate.
+
+CREATE TABLE IF NOT EXISTS shift_template (
+    id TEXT PRIMARY KEY,
+    warehouse_id TEXT NOT NULL REFERENCES warehouse(id),
+    name TEXT NOT NULL,
+    start_time TEXT NOT NULL,
+    end_time TEXT NOT NULL,
+    shift_type TEXT NOT NULL CHECK (shift_type IN ('day','afternoon','night')),
+    days_of_week INTEGER NOT NULL,
+    is_active INTEGER NOT NULL DEFAULT 0,
+    activated_by TEXT,
+    activated_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS labor_regulation (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    max_hours_per_day INTEGER NOT NULL CHECK (max_hours_per_day > 0),
+    max_hours_per_week INTEGER NOT NULL CHECK (max_hours_per_week > 0),
+    break_interval_mins INTEGER,
+    overtime_multiplier REAL,
+    region TEXT,
+    is_active INTEGER NOT NULL DEFAULT 0,
+    activated_by TEXT,
+    activated_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS regulation_shift (
+    regulation_id TEXT NOT NULL REFERENCES labor_regulation(id),
+    shift_template_id TEXT NOT NULL REFERENCES shift_template(id),
+    PRIMARY KEY (regulation_id, shift_template_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_shift_template_warehouse ON shift_template(warehouse_id);

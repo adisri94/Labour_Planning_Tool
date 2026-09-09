@@ -1,7 +1,7 @@
 # Test Cases — Shift & Compliance Configuration
 
 - **Feature Doc**: [link](../features/02-shift-compliance-configuration.md)
-- **Status**: Draft
+- **Status**: Approved
 
 ## Test Cases — US-1: Define a shift template
 

@@ -31,7 +31,7 @@ This is the bridge layer that converts raw demand (orders, forecasts) into atomi
 
 ## 4. Data Model Impact
 
-Entities: `TASK_TYPE`, `TASK` (ERD reference §2.12–2.13). New supporting table: `task_type_change_log` (not in ERD v2 — proposed addition). **This requires an ERD version bump (v2 → v3)** per the schema change protocol (ERD reference §6.2) before implementation.
+Entities: `TASK_TYPE`, `TASK` (ERD reference §2.12–2.13). New supporting table: `task_type_change_log` (not yet in the ERD reference — proposed addition). **Note**: the ERD reference is now at v3 as of Sprint 2 (see [Shift & Compliance Configuration](02-shift-compliance-configuration.md) §4.1), so this feature's schema addition — if approved — will require a v4 bump, not v2→v3 as originally scoped, per the schema change protocol (ERD reference §6.2).
 
 ## 5. API / Interface Design
 

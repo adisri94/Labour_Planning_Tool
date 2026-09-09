@@ -45,3 +45,16 @@ INSERT INTO employee_role (employee_id, job_role_id, certified_date, is_primary)
     ('emp-010', 'role-picker',   '2023-05-10', 1),
     ('emp-011', 'role-picker',   '2024-09-14', 1),
     ('emp-012', 'role-forklift', '2024-02-02', 1);
+
+-- Sprint 2 (BL-2): pre-activated so Sprint 3+ demos aren't blocked by the
+-- legal sign-off gate (see docs/features/02-shift-compliance-configuration.md).
+INSERT INTO shift_template (id, warehouse_id, name, start_time, end_time, shift_type, days_of_week, is_active, activated_by, activated_at) VALUES
+    ('shift-morning', 'wh-001', 'Morning Shift', '06:00', '15:00', 'day',   62, 1, 'Labor Planning PM', '2026-09-09T09:00:00'),
+    ('shift-night',   'wh-001', 'Night Shift',   '22:00', '06:00', 'night', 62, 1, 'Labor Planning PM', '2026-09-09T09:00:00');
+
+INSERT INTO labor_regulation (id, name, max_hours_per_day, max_hours_per_week, break_interval_mins, overtime_multiplier, region, is_active, activated_by, activated_at) VALUES
+    ('reg-factories-act', 'Factories Act 1948', 9, 48, 60, 1.5, 'India', 1, 'Legal & Compliance', '2026-09-09T09:00:00');
+
+INSERT INTO regulation_shift (regulation_id, shift_template_id) VALUES
+    ('reg-factories-act', 'shift-morning'),
+    ('reg-factories-act', 'shift-night');

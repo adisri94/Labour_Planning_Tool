@@ -1,7 +1,7 @@
 # Feature Document — Shift & Compliance Configuration
 
-- **Status**: Draft — Pending Approval
-- **Approved by**: —
+- **Status**: Approved
+- **Approved by**: Aditya Srivastava (2026-09-09)
 - **Related sprint**: Sprint 2, Phase 1 (Must Have) — [SPRINT_BACKLOG.md](../SPRINT_BACKLOG.md), [RELEASE_PLAN.md](../RELEASE_PLAN.md)
 - **Related backlog item(s)**: BL-2 — [PRODUCT_BACKLOG.md](../PRODUCT_BACKLOG.md)
 
@@ -74,7 +74,7 @@ Entities: `SHIFT_TEMPLATE`, `LABOR_REGULATION`, `REGULATION_SHIFT` (ERD referenc
 
 ### 4.1 Resolving the Sprint-1-era open question: where legal sign-off is recorded
 
-Decision: no new ERD entity. Add two fields not currently in the ERD reference to `SHIFT_TEMPLATE` and `LABOR_REGULATION`: `is_active` (boolean, default `false`) and `activated_by` / `activated_at`. **This is a schema addition and requires an ERD version bump (v2 → v3)** per the schema change protocol (ERD reference §6.2), to be applied alongside Feature 04's proposed `task_type_change_log` addition if both are approved close together — or independently if Feature 04 isn't approved yet by the time this ships. Since these are additive (new nullable/defaulted columns, not a breaking change), the ≥24h backward-compatibility rule is satisfied trivially in this single-repo/local-demo context; the ≥5-business-day consumer notice does not apply since there are no external consumers of this schema yet.
+Decision: no new ERD entity. Added two fields not previously in the ERD reference to `SHIFT_TEMPLATE` and `LABOR_REGULATION`: `is_active` (boolean, default `false`) and `activated_by` / `activated_at`. **Applied as ERD v3** (done independently of Feature 04's proposed `task_type_change_log` addition, since Feature 04 isn't approved yet) — see [labor-planning-erd-reference-v2.md](../reference/labor-planning-erd-reference-v2.md) §2.6–2.7 and its Document Changelog (§9, v3.0 entry). Since these are additive (new nullable/defaulted columns, not a breaking change), the ≥24h backward-compatibility rule is satisfied trivially in this single-repo/local-demo context; the ≥5-business-day consumer notice did not apply since there are no external consumers of this schema yet.
 
 ### 4.2 Available-minutes calculation rule
 
@@ -170,9 +170,9 @@ See [testcases/02-shift-compliance-configuration.md](../testcases/02-shift-compl
 
 - Default available-minutes behavior when no regulation is attached (assumed: no break deducted) — reasonable but not ERD-stated; revisit if a warehouse without any regulation turns out to need a default break assumption.
 - Whether `activated_by` should validate against a real user/auth system — moot for now since this local demo has no authentication (per [SOLUTION_ARCHITECTURE.md](../SOLUTION_ARCHITECTURE.md) §8); `activated_by` is a free-text field for the demo.
-- This feature proposes an ERD v3 bump (`is_active`/`activated_by`/`activated_at` on two entities) — confirm whether to apply this now or batch it with Feature 04's proposed change, and update [labor-planning-erd-reference-v2.md](../reference/labor-planning-erd-reference-v2.md)'s changelog (Section 9) accordingly once decided.
+- ~~This feature proposes an ERD v3 bump...~~ — resolved: applied independently as ERD v3 (see Section 4.1).
 
 ## 9. Approval
 
-- [ ] Reviewed by product owner
-- [ ] Approved to start development — approval recorded here and in [DECISION_LOG.md](../DECISION_LOG.md)
+- [x] Reviewed by product owner
+- [x] Approved to start development — approval recorded here and in [DECISION_LOG.md](../DECISION_LOG.md)

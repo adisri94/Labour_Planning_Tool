@@ -28,7 +28,7 @@ Development on any item below may start **only after** its Feature Document is a
 | Sprint | Phase | Backlog ID | Feature | Approval Status |
 |--------|-------|------------|---------|------------------|
 | 1 | Phase 1 (Must) | BL-1 | Facility & Org Master Data | Approved |
-| 2 | Phase 1 (Must) | BL-2 | Shift & Compliance Configuration | Pending |
+| 2 | Phase 1 (Must) | BL-2 | Shift & Compliance Configuration | Approved |
 | 3 | Phase 1 (Must) | BL-3 | Demand Signal Ingestion | Pending |
 | 4 | Phase 1 (Must) | BL-4 | Task Engine | Pending |
 | 5 | Phase 1 (Must) | BL-5 | Labor Requirement Calculation Engine | Pending |
@@ -40,12 +40,20 @@ Development on any item below may start **only after** its Feature Document is a
 
 ## Current Sprint
 
-## Sprint 1 — Phase 1 (Must Have)
+## Sprint 2 — Phase 1 (Must Have)
+
+**Sprint Goal**: Add shift templates and labor regulations, with an activation gate standing in for legal sign-off, plus the available-shift-minutes calculation Feature 05 will consume — the second slice of the local SQLite mock data source and backend.
+
+| Backlog ID | Item | Feature Doc | Test Cases | Approval Status | Dev Status |
+|------------|------|--------------|------------|------------------|------------|
+| BL-2 | Shift & Compliance Configuration | [link](features/02-shift-compliance-configuration.md) | [link](testcases/02-shift-compliance-configuration.md) | Approved | Done |
+
+## Past Sprints
+
+### Sprint 1 — Phase 1 (Must Have)
 
 **Sprint Goal**: Stand up the Facility & Org Master Data foundation — warehouse/zone/employee/job-role/employee-role CRUD, the first slice of the local SQLite mock data source, and a minimal frontend view — so every later feature has a trustworthy data foundation to build on.
 
 | Backlog ID | Item | Feature Doc | Test Cases | Approval Status | Dev Status |
 |------------|------|--------------|------------|------------------|------------|
 | BL-1 | Facility & Org Master Data | [link](features/01-facility-org-master-data.md) | [link](testcases/01-facility-org-master-data.md) | Approved | Done |
-
-## Past Sprints

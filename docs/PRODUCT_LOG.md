@@ -25,6 +25,20 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### Cross-sprint maintenance — 2026-09-10
+
+- **Goal**: Re-localize the demo seed data (Sprint 1 + Sprint 2) from India to a US context for US-based client demos, and fix a local dev-server port conflict encountered while verifying it.
+- **Shipped**:
+  - `db/seed_data.sql`: US warehouse (Chicago FC-1), US employee names, USD job-role rates, Fair Labor Standards Act (FLSA) regulation in place of the India Factories Act 1948 example.
+  - Updated dependent test fixtures/assertions (`backend/tests/conftest.py`, `test_master_data.py`, `test_shift_compliance.py`) and the seed-data descriptions in Feature Documents 01 and 02.
+  - Dev-server resilience fix: Vite reads `PORT` from the environment instead of a hardcoded 5173; backend CORS accepts any `http://localhost:<port>` origin via regex, so a stale/locked process on the default port no longer blocks local development.
+  - Externally verified: user directly edited `shift_template`/`regulation_shift` via DB Browser for SQLite (new Evening Shift 14:00–22:00, Morning Shift end time changed to 14:00) and confirmed the changes flowed correctly through the API and frontend without any code change.
+- **Data model impact**: None — data/config changes only, no schema change.
+- **Deferred / carried over**: None.
+- **Related decisions**: [Demo seed data re-localized from India to the US](DECISION_LOG.md) (2026-09-10).
+- **Commit**: `9f51cd4` on branch `master`, 2026-09-10 — pushed to `https://github.com/adisri94/Labour_Planning_Tool.git` per [CLAUDE.md](../CLAUDE.md) §8.
+- **Owner**: Aditya Srivastava
+
 ### Sprint 2 — 2026-09-09 to 2026-09-09
 
 - **Goal**: Add shift templates and labor regulations, with an activation gate standing in for legal sign-off, plus the available-shift-minutes calculation Feature 05 will consume.

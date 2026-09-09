@@ -25,6 +25,24 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### [2026-09-09] Automated testing backfilled for Sprint 1; made standing practice going forward
+
+- **Status**: Decided
+- **Context**: Sprint 1 had only been manually verified (curl + browser click-through), not covered by an automated test suite — a gap against [CLAUDE.md](../CLAUDE.md) §2's "production-grade... tests" standard. User asked to backfill Sprint 1 with automated tests first, then make automated testing standard practice going forward.
+- **Options considered**: N/A — direct instruction on ordering (backfill first, then codify the practice).
+- **Decision**: Added `pytest`-based automated tests in `backend/tests/` (`test_master_data.py`, `test_init_db.py`, `conftest.py` with an isolated in-memory SQLite fixture — deliberately not the demo `db/labor_planning.db`) covering 19 of the 20 test cases in [testcases/01-facility-org-master-data.md](../testcases/01-facility-org-master-data.md) (TC-5 remains manual/browser-only). Added `backend/requirements-dev.txt` for `pytest`/`httpx`. Codified in [CLAUDE.md](../CLAUDE.md) §6: automated tests are part of every sprint's definition of done going forward, backfilled from the test case doc before a sprint's Dev Status is marked `Done`.
+- **Consequences**: Writing TC-6 as a real test surfaced a genuine ambiguity — the Feature Document's US-2 first acceptance criterion implied any "valid" employee payload (including `employment_status: active`) could be created, but the actual (already-approved, running) implementation enforces the ≥1-role contract at creation time too, so an active employee with zero roles is rejected even on `POST /employees`. Resolved by correcting TC-6 to use `employment_status: on_leave` and documenting the resolution inline in both the test case doc and the test's own comment, rather than silently patching around it. All 19 automated tests pass.
+- **Owner**: Aditya Srivastava
+
+### [2026-09-08] Sprint 1 development approved and committed
+
+- **Status**: Decided
+- **Context**: Sprint 1 (BL-1) development completed and verified end-to-end (backend API acceptance criteria tested via curl; frontend flows — zone listing, role certification, employee termination — verified live in-browser). All planning docs (Product Overview, Feature Set Overview/MoSCoW, Release Plan, Solution Architecture, Feature Documents 01–10, Test Cases 01) and the implementation were ready for a first commit.
+- **Options considered**: N/A — direct approval to commit the completed work.
+- **Decision**: Approved. Committed to local git repo as commit `b24f25447f4803c5e5d8dfdc958d5b8076165670` on branch `master` (2026-09-08), containing the full planning doc set plus Sprint 1 implementation (`db/`, `backend/`, `frontend/`, `README.md`, `.gitignore`). Not yet pushed to the remote — push requires separate explicit confirmation per [CLAUDE.md](../CLAUDE.md) §8.
+- **Consequences**: This is the repo's root commit — no prior history exists. Generated artifacts (`backend/.venv/`, `frontend/node_modules/`, `db/labor_planning.db`) were excluded via `.gitignore` and are not part of the commit.
+- **Owner**: Aditya Srivastava
+
 ### [2026-09-08] Sprint 1 (BL-1, Facility & Org Master Data) approved into Sprint Backlog
 
 - **Status**: Decided

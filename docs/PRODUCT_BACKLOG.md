@@ -18,7 +18,7 @@ The full, prioritized list of features/capabilities under consideration or plann
 | ID | Title | Priority | MoSCoW | Phase | Status | Feature Doc | Notes |
 |----|-------|----------|--------|-------|--------|--------------|-------|
 | BL-1 | Facility & Org Master Data | High | Must | Phase 1 | Done | [link](features/01-facility-org-master-data.md) | Foundational — most other features depend on this. Shipped Sprint 1 (2026-09-08). |
-| BL-2 | Shift & Compliance Configuration | High | Must | Phase 1 | Scoped | [link](features/02-shift-compliance-configuration.md) | Provides `available_shift_minutes` input to requirement calc. |
+| BL-2 | Shift & Compliance Configuration | High | Must | Phase 1 | Scoped | [link](features/02-shift-compliance-configuration.md) | Provides `available_shift_minutes` input to requirement calc. Detailed with test cases (2026-09-08); proposes ERD v3 bump (`is_active`/`activated_by`/`activated_at`); pending approval. |
 | BL-3 | Demand Signal Ingestion | High | Must | Phase 1 | Scoped | [link](features/03-demand-signal-ingestion.md) | Forecast + order/order-line ingestion. |
 | BL-4 | Task Engine (Task Type & Task Generation) | High | Must | Phase 1 | Scoped | [link](features/04-task-engine.md) | Proposes ERD v3 bump (task_type_change_log). |
 | BL-5 | Labor Requirement Calculation Engine | High | Must | Phase 1 | Scoped | [link](features/05-labor-requirement-calculation.md) | Core headcount formula. |

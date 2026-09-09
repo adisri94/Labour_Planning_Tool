@@ -98,6 +98,7 @@ This project is also meant to produce a reusable **framework/playbook for AI-ass
 - Preserve the input → task → output layering; don't let output-layer entities be computed from anything other than TASK/DEMAND_FORECAST aggregation as defined above.
 - Keep UI and backend concerns separated at all times; no direct UI-to-DB access.
 - Flag any place where a prompt's request conflicts with Sections 1–5 above instead of silently reinterpreting scope.
+- **Automated tests, not just manual verification, are part of every sprint's definition of done.** For each feature, backfill its `docs/testcases/<slug>.md` scenarios as runnable tests (e.g., `pytest` in `backend/tests/`) before the sprint's Dev Status is marked `Done` in [SPRINT_BACKLOG.md](docs/SPRINT_BACKLOG.md). Manual/browser-only checks (UI rendering) are the only acceptable exception, and must be labeled as such in the test case doc. If writing the automated test surfaces an ambiguity or contradiction in the test case doc or Feature Document (as happened in Sprint 1's TC-6), fix the doc and note the correction — don't silently patch around it.
 
 ## 7. Development Gate — Documentation Before Code
 

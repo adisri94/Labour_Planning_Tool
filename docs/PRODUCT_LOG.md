@@ -25,6 +25,18 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 
 <!-- Newest entries go here, directly below this line. -->
 
+### Sprint 1 (backfill) — 2026-09-09
+
+- **Goal**: Close the automated-testing gap identified after Sprint 1 shipped with only manual verification; make automated testing standard practice for all future sprints.
+- **Shipped**:
+  - `backend/tests/conftest.py`, `test_master_data.py`, `test_init_db.py` — 19 automated `pytest` tests backfilling 19 of the 20 test cases in [testcases/01-facility-org-master-data.md](testcases/01-facility-org-master-data.md) (TC-5 remains manual/UI-only).
+  - `backend/requirements-dev.txt` for test dependencies (`pytest`, `httpx`).
+  - [CLAUDE.md](../CLAUDE.md) §6 updated: automated test backfill is now part of every sprint's definition of done.
+- **Data model impact**: None.
+- **Deferred / carried over**: None — all backend-testable Sprint 1 scenarios are now automated.
+- **Related decisions**: [Automated testing backfilled for Sprint 1; made standing practice going forward](DECISION_LOG.md) (2026-09-09) — includes the TC-6 ambiguity found and resolved while writing the tests.
+- **Owner**: Aditya Srivastava
+
 ### Sprint 1 — 2026-09-08 to 2026-09-08
 
 - **Goal**: Stand up the Facility & Org Master Data foundation — warehouse/zone/employee/job-role/employee-role CRUD, the first slice of the local SQLite mock data source, and a minimal frontend view.
@@ -37,4 +49,5 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
 - **Data model impact**: None — implements ERD reference v2 §2.1–2.5 as-is, no schema changes.
 - **Deferred / carried over**: `is_primary` uniqueness constraint (open question, not enforced); final 422 error envelope format (deferred to Feature 10, Sprint 8).
 - **Related decisions**: Product Overview approval, Feature Set/MoSCoW, Release Plan, Solution Architecture, and Sprint 1 approval — all in [DECISION_LOG.md](DECISION_LOG.md), entries dated 2026-09-07/2026-09-08.
+- **Commit**: `b24f25447f4803c5e5d8dfdc958d5b8076165670` on branch `master`, 2026-09-08 — pushed to `https://github.com/adisri94/Labour_Planning_Tool.git` (new branch) on 2026-09-08 per [CLAUDE.md](../CLAUDE.md) §8.
 - **Owner**: Aditya Srivastava

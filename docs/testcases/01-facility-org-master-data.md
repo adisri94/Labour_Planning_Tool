@@ -2,6 +2,7 @@
 
 - **Feature Doc**: [link](../features/01-facility-org-master-data.md)
 - **Status**: Approved
+- **Automated**: TC-1–TC-4, TC-6–TC-14, TC-18–TC-20 backfilled as `pytest` tests in [backend/tests/test_master_data.py](../../backend/tests/test_master_data.py); TC-15–TC-17 in [backend/tests/test_init_db.py](../../backend/tests/test_init_db.py). Run with `pytest` from `/backend` (after `pip install -r requirements-dev.txt`). TC-5 remains manual (browser-only check).
 
 ## Test Cases — US-1: View zones and capacity within a warehouse
 
@@ -17,7 +18,7 @@
 
 | ID | Type | Scenario | Preconditions | Steps | Expected Result |
 |----|------|----------|----------------|-------|------------------|
-| TC-6 | Happy path | Create an employee | Warehouse `wh-001` exists | `POST /employees` with valid payload (warehouse_id, name, employee_type, employment_status, hire_date) | 201; response includes generated `id` and echoes submitted fields |
+| TC-6 | Happy path | Create an employee | Warehouse `wh-001` exists | `POST /employees` with valid payload (warehouse_id, name, employee_type, `employment_status: "on_leave"`, hire_date) | 201; response includes generated `id` and echoes submitted fields. **Note**: `employment_status: "active"` with zero roles is *not* valid data — see TC-7; automated test corrected to use `on_leave` after this ambiguity surfaced during test-writing. |
 | TC-7 | Failure mode | Active employee with zero roles rejected | New employee payload has `employment_status: "active"`, no roles attached yet | `POST /employees` then attempt to persist as active with no `EMPLOYEE_ROLE` | 422; error identifies missing-role contract (ERD reference §5.1) |
 | TC-8 | Happy path | Attach a role satisfies the contract | Employee created per TC-6/TC-7 flow, `job_role_id` for "Picker" exists | `POST /employees/{id}/roles` with `{job_role_id, certified_date, is_primary: true}` | 201; `EMPLOYEE_ROLE` record created; employee now satisfies ≥1-role contract; subsequent `GET /employees/{id}` no longer errors on the active-with-no-role rule |
 | TC-9 | Edge case | Multiple `is_primary = true` roles | Employee already has one role with `is_primary: true` | `POST /employees/{id}/roles` with a second role, also `is_primary: true` | Both records persist (no uniqueness constraint enforced yet) — flagged as Open Question in the Feature Doc; test documents current (permissive) behavior, to be revisited if a decision is made |

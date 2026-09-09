@@ -35,8 +35,8 @@ Copy the template below, fill it in, and append it under "Log" in reverse-chrono
   - Externally verified: user directly edited `shift_template`/`regulation_shift` via DB Browser for SQLite (new Evening Shift 14:00–22:00, Morning Shift end time changed to 14:00) and confirmed the changes flowed correctly through the API and frontend without any code change.
 - **Data model impact**: None — data/config changes only, no schema change.
 - **Deferred / carried over**: None.
-- **Related decisions**: [Demo seed data re-localized from India to the US](DECISION_LOG.md) (2026-09-10).
-- **Commit**: `9f51cd4` on branch `master`, 2026-09-10 — pushed to `https://github.com/adisri94/Labour_Planning_Tool.git` per [CLAUDE.md](../CLAUDE.md) §8.
+- **Related decisions**: [Demo seed data re-localized from India to the US](DECISION_LOG.md) (2026-09-10); [Three-shift pattern folded into seed_data.sql](DECISION_LOG.md) (2026-09-10).
+- **Commit**: `9f51cd4` on branch `master`, 2026-09-10; follow-up `2078dcd` (folding the Morning/Evening/Night three-shift pattern into `db/seed_data.sql`, replacing the two-shift seed) — both pushed to `https://github.com/adisri94/Labour_Planning_Tool.git` per [CLAUDE.md](../CLAUDE.md) §8.
 - **Owner**: Aditya Srivastava
 
 ### Sprint 2 — 2026-09-09 to 2026-09-09
